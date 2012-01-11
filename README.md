@@ -29,7 +29,7 @@ replace it with yours. The modifyheaders.json can be edit manually
 or can be prepared with [Modify Headers Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/modify-headers/)
 and exported by the same tool.
 
-Run proxy server
+Run
 ----------------
 
 > ./mh-node.js
