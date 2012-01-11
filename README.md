@@ -14,7 +14,9 @@ It's required NodeJS v0.6.x or higher.
 Installation
 ------------
 
-> cp mh-node.js /whereeveryouwant
+It's not required the installation. Just copy mh-nod.js wherever you want.
+
+You could make mh-node.js executable if you don't want explicitly use node:
 
 > chmod +x mh-node.js
 
@@ -32,12 +34,11 @@ and exported by the same tool.
 Run
 ----------------
 
-> ./mh-node.js
+> node mh-node.hs
 
 or 
 
-> node mh-node.hs
-
+> ./mh-node.js
 
 License
 -------
