@@ -1,0 +1,58 @@
+[
+  {
+    "action": "Add",
+    "name": "User-Agent",
+    "value": "Mozilla/5.0 (Linux; U; Android 2.3.2; iw-il; SonyEricssonLT15a Build/3.0.A.2.181) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
+    "comment": "We wanna be Android!",
+    "enabled": false
+  },
+  {
+    "action": "Add",
+    "name": "Authorization",
+    "value": "OAuth oauth_consumer_key=\"aAW7N1baavq5XOqAYd0A\", oauth_signature_method=\"HMAC-SHA1\", oauth_signature=\"KfAZ1UYc4k3ULNqQok0VWyy0ebY%3D%0A\", oauth_timestamp=\"1305297974\", oauth_nonce=\"epipnymldaybtaaifidaborxfupaloikrazqsjarpzlzhevsrhdhy\", oauth_version=\"1.0\"",
+    "comment": "Fake Twitter Authentication",
+    "enabled": false
+  },
+  {
+    "name": "User-Agent",
+    "value": "Mozilla/5.0 (SymbianOS/9.2;U;Series&0/3.1 NokiaN95/1.51.067 Profile/MIDP-2.0 Configuration/CLDC-1.1)AppleWebKit/413(KHTML,like Gecko) Safari/413",
+    "action": "Add",
+    "comment": "Nokia N95",
+    "enabled": false
+  },
+  {
+    "action": "Add",
+    "name": "User-Agent",
+    "value": "Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3",
+    "comment": "Apple iPhone",
+    "enabled": true
+  },
+  {
+    "action": "Add",
+    "name": "User-Agent",
+    "value": "SonyEricssonW880iv/R1KG Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1",
+    "comment": "SonyEricsson W880i",
+    "enabled": false
+  },
+  {
+    "action": "Add",
+    "name": "Cookie",
+    "value": "AAA=123; BBB=456; CCC=;",
+    "comment": "",
+    "enabled": false
+  },
+  {
+    "action": "Filter",
+    "name": "User-Agent",
+    "value": "",
+    "comment": "",
+    "enabled": true
+  },
+  {
+    "action": "Modify",
+    "name": "X-Custom-Data",
+    "value": "MyCustomDataValue",
+    "comment": "Another comment",
+    "enabled": false
+  }
+]
