@@ -43,7 +43,16 @@ const backend = {
 ///////////////////////////////
 // HTTP Modify Headers Proxy //
 
-var modifyheadersrules = require(modifyheaderslocation);
+var fs = require('fs');
+
+try {
+    var mtimerules = fs.statSync(modifyheaderslocation).mtime.getTime();
+    var modifyheadersrules = JSON.parse(fs.readFileSync(modifyheaderslocation)); 
+} catch(e) {
+    console.log("* ERROR. Cannot open configuration file '" + modifyheaderslocation + "'.");
+    Process.exit(1);
+}
+
 var http  = require('http');
 
 /* A Modify Headers is composed by an array of objects like this
@@ -65,7 +74,7 @@ const actions = {
     filter: "Filter"
 }
 
-const forbiddenmultiples = ["host", "user-agent", "referer"];
+const forbiddenmultiples = ["host", "user-agent", "referer", "authorization"];
 
 function addheader(headers, name, value) {
     var field = name.toLowerCase();
@@ -100,27 +109,43 @@ function filterheader(headers, name) {
     return headers;
 }
 
+function checkforupdate() {
+    try {
+        var mtimerulesupdated = fs.statSync(modifyheaderslocation).mtime.getTime();
+        
+        if(mtimerules != mtimerulesupdated) {
+            modifyheadersrules = JSON.parse(fs.readFileSync(modifyheaderslocation));
+            mtimerules = mtimerulesupdated; 
+        }
+    } catch(e) {
+        
+    }
+}
 function modifyheaders(headers, url) {
+    checkforupdate();
+    
     for(var entry in modifyheadersrules) {
         
         var rule = modifyheadersrules[entry];
+        var headername = rule["name"];
+        var headervalue = rule["value"];
         
         if(rule["enabled"]) {            
             switch(rule["action"]) {
                 case actions.modify:
-                    console.log("Modify detected");
-                    headers = modifyheader(headers, rule["name"], rule["value"]);
+                    //console.log("Modify detected");
+                    headers = modifyheader(headers, headername, headervalue);
                     break;                
                 case actions.add:
-                    console.log("Add detected");
-                    headers = addheader(headers, rule["name"], rule["value"]);
+                    //console.log("Add detected");
+                    headers = addheader(headers, headername, headervalue);
                     break;
                 case actions.filter:
-                    console.log("Filter detected");
-                    headers = filterheader(headers, rule["name"]);
+                    //console.log("Filter detected");
+                    headers = filterheader(headers, headername);
                     break;
                 default:
-                    console.log("Unknown action.");
+                    console.log("* WARNING: Unknown rule action!");
             }            
         }
     }
@@ -153,12 +178,20 @@ http.createServer(function (req, res) {
                 //console.log("> Proxing Request '" + req.url + "' on backend......done");
                 res.end();
             });
-        });
+        }
+    );
+    
+    clientRequest.on('error', function(error) {
+       console.log("* ERROR. Connection to backend '" + backend.host + ":" + backend.port + "' failed!");
+       res.writeHead(503);
+       res.write("<h2>503 Service Unavailable.</h2><i>HTTP Modify Headers Proxy v0.3.0</i>");
+       res.end();
+    });
    
-        req.on('close', function() {
-            //console.log("> Proxing Request '" + req.url + "' closed unexpectedly.");
-            clientRequest.destroy();
-        });
+    req.on('close', function() {
+        //console.log("> Proxing Request '" + req.url + "' closed unexpectedly.");
+        clientRequest.destroy();
+    });
 
 }).listen(proxy.port, proxy.host);
 

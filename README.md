@@ -36,9 +36,9 @@ Run
 
     node mh-node.hs
 
-or 
+or (PATH scope)
 
-    ./mh-node.js
+    mh-node.js
 
 License
 -------

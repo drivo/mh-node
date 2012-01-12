@@ -37,22 +37,43 @@
   {
     "action": "Add",
     "name": "Cookie",
-    "value": "AAA=123; BBB=456; CCC=;",
+    "value": "AAA=123; BBB=456; CCC=789;", 
     "comment": "",
     "enabled": false
   },
   {
     "action": "Filter",
-    "name": "User-Agent",
+    "name": "Cookie",
     "value": "",
     "comment": "",
+    "enabled": false
+  },
+  {
+    "action": "Filter",
+    "name": "X-MSISDN",
+    "value": "",
+    "comment": "",
+    "enabled": true
+  },   
+  {
+    "action": "Add",
+    "name": "X-Custom-Data",
+    "value": "AnotherCustomDataValue",
+    "comment": "Another comment", 
     "enabled": true
   },
   {
     "action": "Modify",
     "name": "X-Custom-Data",
-    "value": "MyCustomDataValue",
+    "value": "MyCustomModifiedDataValue",
     "comment": "Another comment",
-    "enabled": false
+    "enabled": true
+  },
+  {
+    "action": "Add",
+    "name": "X-Custom-Data",
+    "value": "AnotherCustomDataValue",
+    "comment": "Another comment",
+    "enabled": true
   }
 ]
