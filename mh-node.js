@@ -50,7 +50,7 @@ try {
     var modifyheadersrules = JSON.parse(fs.readFileSync(modifyheaderslocation)); 
 } catch(e) {
     console.log("* ERROR. Cannot open configuration file '" + modifyheaderslocation + "'.");
-    Process.exit(1);
+    process.exit(1);
 }
 
 var http  = require('http');
@@ -195,4 +195,4 @@ http.createServer(function (req, res) {
 
 }).listen(proxy.port, proxy.host);
 
-console.log('>> HTTP Modify Headers Proxy running at http://' + proxy.host + ':' + proxy.port);
+console.log('>> HTTP Modify Headers Proxy running at http://' + proxy.host + ':' + proxy.port + " <<");
