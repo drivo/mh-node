@@ -31,7 +31,7 @@ replace it with yours. The modifyheaders.json can be edit manually
 or can be prepared with [Modify Headers Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/modify-headers/)
 and exported by the same tool.
 
-You are free to change the configuration on-the-fly without restaring the proxy. `mh-node' will load it automatically.
+You are free to change the configuration on-the-fly without restaring the proxy. `mh-node` will load it automatically.
 
 Run
 ----------------
