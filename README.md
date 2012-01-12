@@ -18,7 +18,7 @@ It's not required the installation. Just copy mh-nod.js wherever you want.
 
 You could make mh-node.js executable if you don't want explicitly use node:
 
-> chmod +x mh-node.js
+    chmod +x mh-node.js
 
 Configuration
 -------------
@@ -34,11 +34,11 @@ and exported by the same tool.
 Run
 ----------------
 
-> node mh-node.hs
+    node mh-node.hs
 
 or 
 
-> ./mh-node.js
+    ./mh-node.js
 
 License
 -------
