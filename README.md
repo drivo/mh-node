@@ -14,7 +14,7 @@ It's required [NodeJS v0.6.x](http://nodejs.org/) or higher.
 Installation
 ------------
 
-It's not required the installation. Just copy `mh-nod.js` wherever you want.
+It's not required the installation. Just copy `mh-node.js` wherever you want.
 
 You could make mh-node.js executable if you don't want explicitly use node:
 
