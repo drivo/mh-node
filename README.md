@@ -42,4 +42,6 @@ or
 
 License
 -------
+Copyright (C) 2012 by Guido D'Albore.
+
 * [Licensed under the Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
