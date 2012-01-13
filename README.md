@@ -1,7 +1,7 @@
 mh-node
 ==============================================================
 
-A NodeJS HTTP Proxy based on [Modify Headers Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/modify-headers/).
+A NodeJS HTTP Reverse Proxy based on [Modify Headers Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/modify-headers/).
 
 This proxy reads JSON configuration file exported by the add-on and
 runs an HTTP proxy server which acts as Modify Headers filter.
@@ -30,6 +30,8 @@ A sample `modifyheaders.json` is provided in the project. You need to
 replace it with yours. The modifyheaders.json can be edit manually 
 or can be prepared with [Modify Headers Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/modify-headers/)
 and exported by the same tool.
+
+You are free to change the configuration on-the-fly without restaring the proxy. `mh-node` will load it automatically.
 
 Run
 ----------------
