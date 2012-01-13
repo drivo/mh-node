@@ -46,13 +46,21 @@ const backend = {
 var fs = require('fs');
 
 try {
-    var mtimerules = fs.statSync(modifyheaderslocation).mtime.getTime();
-    var modifyheadersrules = JSON.parse(fs.readFileSync(modifyheaderslocation)); 
+    var modifyheadersrules = JSON.parse(fs.readFileSync(modifyheaderslocation));
 } catch(e) {
     console.log("* ERROR. Cannot open configuration file '" + modifyheaderslocation + "'.");
     process.exit(1);
 }
 
+fs.watchFile(modifyheaderslocation, function(curr, prev) {
+    if( (curr.mtime != prev.mtime)  ||
+        (curr.size != prev.size)    ||
+        (curr.ctime != prev.ctime)  ){
+    
+        modifyheadersrules = JSON.parse(fs.readFileSync(modifyheaderslocation));
+    }        
+});
+    
 var http  = require('http');
 
 /* A Modify Headers is composed by an array of objects like this
@@ -76,6 +84,8 @@ const actions = {
 
 const forbiddenmultiples = ["host", "user-agent", "referer", "authorization"];
 
+
+    
 function addheader(headers, name, value) {
     var field = name.toLowerCase();
     
@@ -109,20 +119,7 @@ function filterheader(headers, name) {
     return headers;
 }
 
-function checkforupdate() {
-    try {
-        var mtimerulesupdated = fs.statSync(modifyheaderslocation).mtime.getTime();
-        
-        if(mtimerules != mtimerulesupdated) {
-            modifyheadersrules = JSON.parse(fs.readFileSync(modifyheaderslocation));
-            mtimerules = mtimerulesupdated; 
-        }
-    } catch(e) {
-        
-    }
-}
 function modifyheaders(headers, url) {
-    checkforupdate();
     
     for(var entry in modifyheadersrules) {
         
