@@ -20,7 +20,7 @@
   
 */
 
-const VERSION = "0.4.0"
+const VERSION = "0.5.0"
 
 ///////////////////
 // Configuration // 
@@ -30,17 +30,18 @@ const modifyheaderslocation =
 	__dirname + "/modifyheaders.json"
 ;
 
-/* Binding address and port of Modify Header proxy */
+/* Binding address and port of Modify Header proxy. Supported schemas: "http" or "https". */
 const proxy = {
-	host: "127.0.0.1",
-	port: 8079,
+    schema: "https",
+	host:   "127.0.0.1",
+	port:   8443,
 };
 
 /* Host and port of backend server. Supported schemas: "http" or "https". */
 const backend = {
     schema: "https", 
-	host:   "127.0.0.1",
-	port:   8080,
+	host:   "www.google.it",
+	port:   443,
 };
 
 ///////////////////////////////
@@ -49,10 +50,15 @@ const backend = {
 var fs = require('fs');
 
 try {
-    var modifyheadersrules = JSON.parse(fs.readFileSync(modifyheaderslocation));
+    var modifyheadersrules = [];
+
+    if(fs.existsSync(modifyheaderslocation)) {
+        var modifyheadersrules = JSON.parse(fs.readFileSync(modifyheaderslocation));
+    } else {
+        console.log("* WARNING. Modify Header configuration file '" + modifyheaderslocation + "' not found. Modify Header features will be disabled.");
+    }
 } catch(e) {
-    console.log("* ERROR. Cannot open configuration file '" + modifyheaderslocation + "'.");
-    process.exit(1);
+    console.log("* WARNING. Modify Header configuration file '" + modifyheaderslocation + "' cannot be opened! Modify Header features will be disabled.");
 }
 
 fs.watchFile(modifyheaderslocation, function(curr, prev) {
@@ -64,7 +70,8 @@ fs.watchFile(modifyheaderslocation, function(curr, prev) {
     }        
 });
     
-var http = httpClient = require('http');
+var http    = httpClient = require('http');
+var https   = require('https');
 
 if(backend.schema == 'https') {
     httpClient = require('https');    
@@ -90,8 +97,6 @@ const actions = {
 }
 
 const forbiddenmultiples = ["host", "user-agent", "referer", "authorization"];
-
-
     
 function addheader(headers, name, value) {
     var field = name.toLowerCase();
@@ -159,7 +164,7 @@ function modifyheaders(headers, url) {
     return headers;
 }
 
-http.createServer(function (req, res) {
+function requestListener(req, res) {
     console.log("> Proxing Request '" + req.url + "' on backend...");
     console.log("  - Method: " + req.method);
    
@@ -209,6 +214,19 @@ http.createServer(function (req, res) {
         clientRequest.destroy();
     });
 
-}).listen(proxy.port, proxy.host);
+}
 
-console.log('>> HTTP Modify Headers Proxy running at http://' + proxy.host + ':' + proxy.port + " <<");
+if(proxy.schema == 'https') {
+
+    https.createServer( {
+                            key:        fs.readFileSync(__dirname + '/mh-node-private.pem'),
+                            cert:       fs.readFileSync(__dirname + '/mh-node-cert.pem'),
+                            passphrase: 'test'
+                        }, requestListener).listen(proxy.port, proxy.host);
+} else {
+
+    http.createServer(requestListener).listen(proxy.port, proxy.host);
+
+}
+
+console.log('>> HTTP Modify Headers Proxy running at ' + proxy.schema + '://' +  proxy.host + ':' + proxy.port + " <<");
