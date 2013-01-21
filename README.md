@@ -3,8 +3,9 @@ mh-node
 
 A NodeJS HTTP Reverse Proxy based on [Modify Headers Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/modify-headers/).
 
-This proxy reads JSON configuration file exported by the add-on and
-runs an HTTP proxy server which acts as Modify Headers filter.
+This proxy reads JSON configuration file exported by the add-on and runs an HTTP proxy server which acts as Modify Headers filter.
+
+It can be used simply for reverse proxying HTTP/HTTPS as well. All HTTP/HTTPS methods are supported (i.e. GET, POST, PUT, DELETE, etc.).
 
 Requirement
 -----------
@@ -14,7 +15,7 @@ It's required [NodeJS v0.6.x](http://nodejs.org/) or higher.
 Installation
 ------------
 
-It's not required the installation. Just copy `mh-node.js` wherever you want.
+It's not required the installation. Just copy `mh-node.js` wherever you want. No modules dependencies.
 
 You could make mh-node.js executable if you don't want explicitly use node:
 

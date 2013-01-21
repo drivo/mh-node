@@ -20,6 +20,8 @@
   
 */
 
+const VERSION = "0.4.0"
+
 ///////////////////
 // Configuration // 
 
@@ -34,10 +36,11 @@ const proxy = {
 	port: 8079,
 };
 
-/* Host and port of backend server */
+/* Host and port of backend server. Supported schemas: "http" or "https". */
 const backend = {
-	host: "127.0.0.1",
-	port: 8080,
+    schema: "https", 
+	host:   "127.0.0.1",
+	port:   8080,
 };
 
 ///////////////////////////////
@@ -61,7 +64,11 @@ fs.watchFile(modifyheaderslocation, function(curr, prev) {
     }        
 });
     
-var http  = require('http');
+var http = httpClient = require('http');
+
+if(backend.schema == 'https') {
+    httpClient = require('https');    
+}
 
 /* A Modify Headers is composed by an array of objects like this
 {
@@ -153,12 +160,14 @@ function modifyheaders(headers, url) {
 }
 
 http.createServer(function (req, res) {
-    //console.log("> Proxing Request '" + req.url + "' on backend...");
+    console.log("> Proxing Request '" + req.url + "' on backend...");
+    console.log("  - Method: " + req.method);
    
-    clientRequest = http.get(
+    clientRequest = httpClient.request(
         {  host:backend.host,
            port:backend.port,
            path:req.url,
+           method: req.method,
            headers: modifyheaders(req.headers, req.url)
         },
         
@@ -172,21 +181,31 @@ http.createServer(function (req, res) {
             });
 
             backendResponse.on('end', function () {
-                //console.log("> Proxing Request '" + req.url + "' on backend......done");
+                console.log("> Proxing Request '" + req.url + "' on backend......done");
                 res.end();
             });
         }
     );
     
+    req.on('data', function(chunk) {
+        console.log("* Data coming from client: " + chunk.length);
+        clientRequest.write(chunk);
+    });
+
+    req.on('end', function() {
+        console.log("* Data ended from client. The request has been routed to backend.");
+        clientRequest.end();
+    });
+
     clientRequest.on('error', function(error) {
        console.log("* ERROR. Connection to backend '" + backend.host + ":" + backend.port + "' failed!");
-       res.writeHead(503);
-       res.write("<h2>503 Service Unavailable.</h2><i>HTTP Modify Headers Proxy v0.3.0</i>");
+       res.writeHead(503, {'Content-Type': 'text/html'});
+       res.write("<h2>503 Service Unavailable.</h2><i>HTTP Modify Headers Proxy v" + VERSION + "</i>");
        res.end();
     });
    
     req.on('close', function() {
-        //console.log("> Proxing Request '" + req.url + "' closed unexpectedly.");
+        console.log("> Proxing Request '" + req.url + "' closed unexpectedly.");
         clientRequest.destroy();
     });
 
